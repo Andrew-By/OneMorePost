@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OneMorePost.Models;
+using OneMorePost.Interfaces;
+using OneMorePost.Services;
 
 namespace OneMorePost
 {
@@ -27,8 +30,14 @@ namespace OneMorePost
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Параметры VK API
+            services.Configure<VKOptions>(Configuration.GetSection("VK"));
+
             // Add framework services.
             services.AddMvc();
+
+            // Здесь добавляем свои сервисы
+            services.AddSingleton<IVKService, VKService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
