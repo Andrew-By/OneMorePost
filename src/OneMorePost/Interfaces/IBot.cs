@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace OneMorePost.Interfaces
 {
-    public interface IMailService
+    public interface IBot
     {
-        IList<EmailMessage> GetNewMessages(Account account);
+        void Post(Account account, EmailMessage message);
     }
 }
