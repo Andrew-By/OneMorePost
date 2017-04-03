@@ -17,15 +17,27 @@ namespace OneMorePost.Controllers
     {
         private readonly ITelegramService service;
 
+        // TODO: Delete after testing
+        private List<string> history = new List<string>();
+
         public TelegramController(ITelegramService service)
         {
             this.service = service;
+        }
+
+        // GET api/telegram
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return history;
         }
 
         // POST api/telegram
         [HttpPost]
         public void Post(Update message)
         {
+            history.Add(message.Message.Text);
+            service.PostInfo(new TelegramAccount { Id=message.Id }, message.Message.Text);
         }
     }
 }
