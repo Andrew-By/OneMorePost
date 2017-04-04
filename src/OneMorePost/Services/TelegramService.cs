@@ -22,7 +22,7 @@ namespace OneMorePost.Services
             // TODO: It's not working for now (I think because we have no ssl certificate).
             //       see: https://core.telegram.org/bots/faq#i-39m-having-problems-with-webhooks
 
-            botClient.SetWebhookAsync("https://matrohin-onemorepost.azurewebsites.net/api/telegram").Wait();
+            //botClient.SetWebhookAsync("https://matrohin-onemorepost.azurewebsites.net/api/telegram").Wait();
         }
 
         public void PostInfo(TelegramAccount toUser, string message)
