@@ -27,7 +27,6 @@ namespace OneMorePost.Services
         {
             var client = new HttpClient();
             string result = client.GetStringAsync($"{VKEndPointUri}/access_token?client_id={options.AppId}&client_secret={options.AppSecret}&redirect_uri={RedirectUri}&code={code}").Result;
-            //string result = client.PostAsync($"{VKEndPointUri}/accessToken", new StringContent("client_id={options.AppId}&client_secret={options.AppSecret}&redirect_uri={RedirectUri}&code={code}")).Result.Content.ReadAsStringAsync().Result;
             AccessTokenResponse response = JsonConvert.DeserializeObject<AccessTokenResponse>(result);
             return response.access_token;
         }
