@@ -8,5 +8,6 @@ namespace OneMorePost.Models
     public class VKOptions
     {
         public string AppId { get; set; }
+        public string AppSecret { get; set; }
     }
 }

@@ -1,16 +1,35 @@
-﻿using OneMorePost.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using OneMorePost.Interfaces;
+using OneMorePost.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OneMorePost.Services
 {
     public class VKService : IVKService
     {
-        public int GetAccessToken(string code)
+        private const string VKEndPointUri = "https://oauth.vk.com";
+        private const string RedirectUri = "http://onemorepost.azurewebsites.net/api/VK/Auth";
+
+        private readonly VKOptions options;
+
+        public VKService(IOptions<VKOptions> optionsAccessor)
         {
-            throw new NotImplementedException();
+            options = optionsAccessor.Value;
+        }
+
+        public string GetAccessToken(string code)
+        {
+            var client = new HttpClient();
+            string result = client.GetStringAsync($"{VKEndPointUri}/accessToken?client_id={options.AppId}&client_secret={options.AppSecret}&redirect_uri={RedirectUri}&code={code}").Result;
+            //string result = client.PostAsync($"{VKEndPointUri}/accessToken", new StringContent("client_id={options.AppId}&client_secret={options.AppSecret}&redirect_uri={RedirectUri}&code={code}")).Result.Content.ReadAsStringAsync().Result;
+            AccessTokenResponse response = JsonConvert.DeserializeObject<AccessTokenResponse>(result);
+            return response.access_token;
         }
 
         public void MakePost(int userId, string message)

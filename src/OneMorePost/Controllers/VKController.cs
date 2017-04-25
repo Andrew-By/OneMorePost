@@ -11,12 +11,12 @@ using OneMorePost.Models;
 
 namespace OneMorePost.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class VKController : Controller
     {
         private readonly IVKService vkService;
 
-        public VKController(IVKService vkService)
+        public VKController(IOptions<VKOptions> optionsAccessor, IVKService vkService)
         {
             this.vkService = vkService;
         }
@@ -28,17 +28,9 @@ namespace OneMorePost.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [HttpGet]
         public void Auth(string code)
         {
             vkService.GetAccessToken(code);
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
         }
 
         // POST api/values

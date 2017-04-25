@@ -22,6 +22,11 @@ namespace OneMorePost
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            // Дополнительно обрабатываем пользовательский конфигурационный файл с секретами
+            if (env.IsDevelopment())
+                builder.AddUserSecrets();
+
             Configuration = builder.Build();
         }
 
