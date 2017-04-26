@@ -33,7 +33,7 @@ namespace OneMorePost.Controllers
 
         // POST api/telegram
         [HttpPost]
-        public void Post(Update message)
+        public void Post([FromBody] Update message)
         {
             service.PostInfo(new TelegramAccount { Id=message.Id }, message.Message.Text);
         }
