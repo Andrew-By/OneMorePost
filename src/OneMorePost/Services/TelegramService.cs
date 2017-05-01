@@ -20,9 +20,28 @@ namespace OneMorePost.Services
             botClient = new TelegramBotClient(settings.Value.BotId);
         }
 
-        public void PostInfo(TelegramAccount toUser, string message)
+        public void MakePost(TelegramAccount toUser, string message)
         {
             botClient.SendTextMessageAsync(toUser.Id, message);
         }
+
+        public void OnMessage(TelegramAccount fromUser, string message)
+        {
+            botClient.SendTextMessageAsync(fromUser.Id, message);
+        }
+
+        public void Subscribe(TelegramAccount follower)
+        {
+            // TODO: Implement
+            botClient.SendTextMessageAsync(follower.Id, "Not implemented so far");
+        }
+
+        public void Unsubscribe(TelegramAccount follower)
+        {
+            // TODO: Implement
+            botClient.SendTextMessageAsync(follower.Id, "Not implemented so far");
+        }
+
+
     }
 }

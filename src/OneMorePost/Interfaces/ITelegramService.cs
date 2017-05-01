@@ -8,6 +8,9 @@ namespace OneMorePost.Interfaces
 {
     public interface ITelegramService
     {
-        void PostInfo(TelegramAccount toUser, string message);
+        void MakePost(TelegramAccount toUser, string message);
+        void OnMessage(TelegramAccount fromUser, string message);
+        void Subscribe(TelegramAccount follower);
+        void Unsubscribe(TelegramAccount follower);
     }
 }

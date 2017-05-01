@@ -7,6 +7,7 @@ using OneMorePost.Interfaces;
 using OneMorePost.Models;
 using Microsoft.Extensions.Options;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,7 +27,22 @@ namespace OneMorePost.Controllers
         [HttpPost]
         public void Post([FromBody] Update message)
         {
-            service.PostInfo(new TelegramAccount { Id=message.Message.From.Id }, message.Message.Text);
+            if (message.Type == UpdateType.MessageUpdate)
+            {
+                var from = new TelegramAccount { Id = message.Message.From.Id };
+                switch (message.Message.Text)
+                {
+                    case "/subscribe":
+                        service.Subscribe(from);
+                        break;
+                    case "/unsubscribe":
+                        service.Unsubscribe(from);
+                        break;
+                    default:
+                        service.OnMessage(from, message.Message.Text);
+                        break;
+                }
+            }
         }
     }
 }
