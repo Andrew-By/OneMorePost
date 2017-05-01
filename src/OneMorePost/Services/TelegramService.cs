@@ -65,18 +65,39 @@ namespace OneMorePost.Services
             }
             else
             {
-                botClient.SendTextMessageAsync(fromUser.Id, "Вы можете вызвать /help для получения возможных команд");
+                Start(fromUser);
             }
+        }
+
+        public void Start(TelegramAccount user)
+        {
+            botClient.SendTextMessageAsync(user.Id, "Вы можете вызвать /help для получения возможных команд");
+        }
+
+        public void Help(TelegramAccount user)
+        {
+            botClient.SendTextMessageAsync(user.Id, "Команды:\n" +
+                "/help - Вывести возможные команды\n" +
+                "/subscribe - Подписаться на новые письма\n" +
+                "/unsubscribe - Отписаться от получения писем\n");
         }
 
         public void Subscribe(TelegramAccount follower)
         {
+            if (accountsState.ContainsKey(follower.Id))
+            {
+                accountsState.Remove(follower.Id);
+            }
             accountsState.Add(follower.Id, EState.InSubscibe);
             botClient.SendTextMessageAsync(follower.Id, "Пожалуйста, введите уникальный идентификатор подписки");
         }
 
         public void Unsubscribe(TelegramAccount follower)
         {
+            if (accountsState.ContainsKey(follower.Id))
+            {
+                accountsState.Remove(follower.Id);
+            }
             accountsState.Add(follower.Id, EState.InUnsubscribe);
             botClient.SendTextMessageAsync(follower.Id, "Пожалуйста, введите уникальный идентификатор подписки");
         }
@@ -92,6 +113,5 @@ namespace OneMorePost.Services
             // TODO: Implement
             return false;
         }
-
     }
 }

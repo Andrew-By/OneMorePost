@@ -32,6 +32,12 @@ namespace OneMorePost.Controllers
                 var from = new TelegramAccount { Id = message.Message.From.Id };
                 switch (message.Message.Text)
                 {
+                    case "/start":
+                        service.Start(from);
+                        break;
+                    case "/help":
+                        service.Help(from);
+                        break;
                     case "/subscribe":
                         service.Subscribe(from);
                         break;
