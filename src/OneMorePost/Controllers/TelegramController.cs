@@ -22,20 +22,11 @@ namespace OneMorePost.Controllers
             this.service = service;
         }
 
-        // GET api/telegram
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            // TODO: Delete after testing
-            service.PostInfo(new TelegramAccount { Id=321556353 }, "Hello!:)");
-            return new string[] { };
-        }
-
         // POST api/telegram
         [HttpPost]
         public void Post([FromBody] Update message)
         {
-            service.PostInfo(new TelegramAccount { Id=message.Id }, message.Message.Text);
+            service.PostInfo(new TelegramAccount { Id=message.Message.From.Id }, message.Message.Text);
         }
     }
 }
