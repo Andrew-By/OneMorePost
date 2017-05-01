@@ -23,10 +23,6 @@ namespace OneMorePost
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            // Дополнительно обрабатываем пользовательский конфигурационный файл с секретами
-            if (env.IsDevelopment())
-                builder.AddUserSecrets();
-
             Configuration = builder.Build();
         }
 
@@ -51,7 +47,24 @@ namespace OneMorePost
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
