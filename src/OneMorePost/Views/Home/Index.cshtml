@@ -4,12 +4,14 @@
 
 @*<iframe src="https://oauth.vk.com/authorize?client_id=6001863&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline,wall&response_type=token&v=5.63" />*@
 
-<form>
-    <div class="form-group">
-        <label for="inputGroupId">Id группы</label>
-        <input type="number" class="form-control" id="inputGroupId" />
-    </div>
-</form>
-<button type="submit" class="btn btn-default">Регистрация</button>
+<div ng-controller="vkController">
+    <form>
+        <div class="form-group">
+            <label for="inputGroupId">Id группы</label>
+            <input type="number" class="form-control" id="inputGroupId" />
+        </div>
+    </form>
+    <button type="submit" class="btn btn-default" ng-click="auth()">Регистрация</button>
 
-<iframe id="vkframe" src="http://www.yandex.ru"></iframe>
+    <iframe id="vkframe" src="https://oauth.vk.com/authorize?client_id=6001863&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline,wall&response_type=token&v=5.63"></iframe>
+</div>

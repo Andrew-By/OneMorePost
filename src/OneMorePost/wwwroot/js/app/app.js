@@ -1,11 +1,12 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('app', [
+    angular.module('OneMorePost', [
         // Angular modules 
 
         // Custom modules 
-        'vk'
+        'vk',
+        'local'
 
         // 3rd Party Modules
         
