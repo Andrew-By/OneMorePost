@@ -4,14 +4,16 @@
 
 @*<iframe src="https://oauth.vk.com/authorize?client_id=6001863&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline,wall&response_type=token&v=5.63" />*@
 
-<div ng-controller="vkController">
+<div>
     <form>
         <div class="form-group">
-            <label for="inputGroupId">Id группы</label>
-            <input type="number" class="form-control" id="inputGroupId" />
+            <label for="userId">UserId</label>
+            <input type="number" class="form-control" id="userId" />
         </div>
+        <div class="form-group">
+            <label for="authToken">AuthToken</label>
+            <input type="number" class="form-control" id="authToken" />
+        </div>
+        <input type="submit" class="btn btn-default" value="Регистрация" />
     </form>
-    <button type="submit" class="btn btn-default" ng-click="auth()">Регистрация</button>
-
-    <iframe id="vkframe" src="https://oauth.vk.com/authorize?client_id=6001863&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline,wall&response_type=token&v=5.63"></iframe>
 </div>
