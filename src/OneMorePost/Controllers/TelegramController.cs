@@ -16,11 +16,11 @@ namespace OneMorePost.Controllers
     [Route("api/[controller]")]
     public class TelegramController : Controller
     {
-        private readonly ITelegramService service;
+        private readonly ITelegramService _service;
 
         public TelegramController(ITelegramService service)
         {
-            this.service = service;
+            _service = service;
         }
 
         // POST api/telegram
@@ -33,19 +33,19 @@ namespace OneMorePost.Controllers
                 switch (message.Message.Text)
                 {
                     case "/start":
-                        service.Start(from);
+                        _service.Start(from);
                         break;
                     case "/help":
-                        service.Help(from);
+                        _service.Help(from);
                         break;
                     case "/subscribe":
-                        service.Subscribe(from);
+                        _service.Subscribe(from);
                         break;
                     case "/unsubscribe":
-                        service.Unsubscribe(from);
+                        _service.Unsubscribe(from);
                         break;
                     default:
-                        service.OnMessage(from, message.Message.Text);
+                        _service.OnMessage(from, message.Message.Text);
                         break;
                 }
             }
