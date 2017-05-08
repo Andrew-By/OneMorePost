@@ -15,7 +15,6 @@ namespace OneMorePost.Services
     {
         private const string VKApi = "https://api.vk.com/method";
         private const string VKOAuth = "https://oauth.vk.com";
-        private const string VKVersion = "5.63";
         private const string RedirectUri = "http://onemorepost.azurewebsites.net/api/VK/Auth";
 
         private readonly VKOptions options;

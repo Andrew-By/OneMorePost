@@ -9,5 +9,6 @@ namespace OneMorePost.Models
     {
         public string AppId { get; set; }
         public string AppSecret { get; set; }
+        public string Version { get; set; }
     }
 }
