@@ -7,7 +7,6 @@ namespace OneMorePost.Interfaces
 {
     public interface IVKService
     {
-        string GetAccessToken(string code);
         void MakePost(int userId, string message);
     }
 }
