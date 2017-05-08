@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Главная страница";
+}
+
+<div>
+    <a target="_blank" href="https://oauth.vk.com/authorize?client_id=6001863&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline,wall&response_type=token&v=5.63">Получить реквизиты</a>
+    <form asp-action="Register" method="post">
+        <div class="form-group">
+            <label for="userId">UserId</label>
+            <input type="number" class="form-control" id="userId" name="userId" />
+        </div>
+        <div class="form-group">
+            <label for="groupId">GroupId</label>
+            <input type="number" class="form-control" id="groupId" name="groupId" />
+        </div>
+        <div class="form-group">
+            <label for="authToken">AuthToken</label>
+            <input type="text" class="form-control" id="authToken" name="authToken" />
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" />
+        </div>
+        <input type="submit" class="btn btn-default" value="Регистрация" />
+    </form>
+</div>
