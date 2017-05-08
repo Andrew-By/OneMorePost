@@ -11,6 +11,7 @@ namespace OneMorePost.Models
     public class User
     {
         public int Id { get; set; } // Совпадает с VK Id пользователя
+        public string VKAuthToken { get; set; }
         public EmailAccount EmailAccount { get; set; }
         public int GroupId { get; set; } // Ид. группы, в которую происходит пост
 

@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using OneMorePost.Models;
 using OneMorePost.Interfaces;
 using OneMorePost.Services;
+using OneMorePost.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace OneMorePost
 {
@@ -35,6 +37,9 @@ namespace OneMorePost
             services.Configure<VKOptions>(Configuration.GetSection("VK"));
 
             // Add framework services.
+            services.AddDbContext<OneMoreContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMvc();
 
             // Здесь добавляем свои сервисы
@@ -42,7 +47,7 @@ namespace OneMorePost
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, OneMoreContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -65,6 +70,8 @@ namespace OneMorePost
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DbInitializer.Initialize(context);
         }
     }
 }
