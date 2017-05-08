@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OneMorePost.Models;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 
 namespace OneMorePost.Services
 {
@@ -19,7 +20,7 @@ namespace OneMorePost.Services
 
         private readonly IOptions<TelegramSettings> _settings;
         private readonly TelegramBotClient _botClient;
-        private readonly Dictionary<long, EState> _accountsState = new Dictionary<long, EState>();
+        private readonly Dictionary<ChatId, EState> _accountsState = new Dictionary<ChatId, EState>();
 
         public TelegramService(IOptions<TelegramSettings> settings)
         {
