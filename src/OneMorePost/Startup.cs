@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using OneMorePost.Models;
 using OneMorePost.Interfaces;
 using OneMorePost.Services;
+using OneMorePost.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace OneMorePost
 {
@@ -22,6 +24,7 @@ namespace OneMorePost
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
         }
 
@@ -30,21 +33,48 @@ namespace OneMorePost
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Параметры VK API
+            services.Configure<VKOptions>(Configuration.GetSection("VK"));
+
             services.Configure<TelegramSettings>(Configuration.GetSection("Telegram"));
 
             // Add framework services.
+            services.AddDbContext<OneMoreContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMvc();
 
+            // Здесь добавляем свои сервисы
+            services.AddSingleton<IVKService, VKService>();
             services.AddSingleton<ITelegramService, TelegramService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, OneMoreContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            DbInitializer.Initialize(context);
         }
     }
 }
