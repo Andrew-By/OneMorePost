@@ -8,6 +8,6 @@ namespace OneMorePost.Interfaces
 {
     public interface IMailService
     {
-        IList<EmailMessage> GetNewMessages();
+        IList<EmailMessage> GetNewMessages(Account account);
     }
 }

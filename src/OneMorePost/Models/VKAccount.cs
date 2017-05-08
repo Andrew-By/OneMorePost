@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace OneMorePost.Models
 {
-    /// <summary>
-    /// Автор письма. Для белого списка.
-    /// </summary>
-    public class Author
+    public class VKAccount
     {
         public int Id { get; set; }
-        public string Email { get; set; }
+        public int GroupId { get; set; }
+        public string AccessToken { get; set; }
     }
 }
