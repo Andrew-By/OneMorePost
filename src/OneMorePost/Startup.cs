@@ -36,6 +36,8 @@ namespace OneMorePost
             // Параметры VK API
             services.Configure<VKOptions>(Configuration.GetSection("VK"));
 
+            services.Configure<TelegramSettings>(Configuration.GetSection("Telegram"));
+
             // Add framework services.
             services.AddDbContext<OneMoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -44,6 +46,7 @@ namespace OneMorePost
 
             // Здесь добавляем свои сервисы
             services.AddSingleton<IVKService, VKService>();
+            services.AddSingleton<ITelegramService, TelegramService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
