@@ -7,6 +7,6 @@ namespace OneMorePost.Interfaces
 {
     public interface IVKService
     {
-        void MakePost(int userId, string message);
+        Task MakePostAsync(int accountId, string message);
     }
 }

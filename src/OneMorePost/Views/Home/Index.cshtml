@@ -21,6 +21,27 @@
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" />
         </div>
+        <div class="form-group">
+            <label for="server">IMAP сервер</label>
+            <input type="text" class="form-control" id="server" name="server" value="imap.gmail.com" />
+        </div>
+        <div class="form-group">
+            <label for="port">Порт</label>
+            <input type="number" class="form-control" id="port" name="port" value="993" />
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="ssl" value="true" checked="checked"> Использовать шифрование
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="login">Логин</label>
+            <input type="text" class="form-control" id="login" name="login" />
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" class="form-control" id="password" name="password" />
+        </div>
         <input type="submit" class="btn btn-default" value="Регистрация" />
     </form>
 </div>

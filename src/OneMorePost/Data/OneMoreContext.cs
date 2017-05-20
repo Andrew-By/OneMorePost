@@ -11,6 +11,6 @@ namespace OneMorePost.Data
     {
         public OneMoreContext(DbContextOptions<OneMoreContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }

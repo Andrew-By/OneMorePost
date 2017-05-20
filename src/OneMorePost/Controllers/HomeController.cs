@@ -24,16 +24,27 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(int userId, int groupId, string authToken, string email)
+        public IActionResult Register(
+            int userId, int groupId, string authToken,
+            string email, string server, int port, bool ssl, string login, string password)
         {
-            _context.Add(new User
+            _context.Add(new Account
             {
-                Id = userId,
-                GroupId = groupId,
-                VKAuthToken = authToken,
+                VKAccount = new VKAccount()
+                {
+                    Id = userId,
+                    GroupId = groupId,
+                    AccessToken = authToken
+                },
                 EmailAccount = new EmailAccount
                 {
-                    Email = email
+                    Email = email,
+                    ServerUri = server,
+                    ServerPort = port,
+                    ServerUseSSL = ssl,
+                    UserName = login,
+                    Password = password,
+                    InternalWhileListFrom = "*"
                 }
             });
             _context.SaveChanges();

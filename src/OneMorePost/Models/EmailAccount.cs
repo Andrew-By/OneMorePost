@@ -13,11 +13,6 @@ namespace OneMorePost.Models
     {
         private const char SEPARATOR = ';';
 
-        public EmailAccount()
-        {
-            LastMessageDate = new DateTime();
-        }
-
         public int Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
@@ -25,7 +20,7 @@ namespace OneMorePost.Models
         public string ServerUri { get; set; }
         public int ServerPort { get; set; }
         public bool ServerUseSSL { get; set; }
-        public DateTime LastMessageDate { get; set; }
+        public int LastMessageUid { get; set; }
         public string InternalWhileListFrom { get; set; }
         [NotMapped]
         public List<string> WhileListFrom
