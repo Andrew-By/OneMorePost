@@ -37,7 +37,13 @@ namespace OneMorePost.Controllers
                     {
                         List<EmailMessage> messages = _mailService.GetNewMessages(account.Id).ToList();
                         foreach (var message in messages)
-                            _vkService.MakePostAsync(account.Id, message.Body);
+                        {
+                            var attachmentsUrls = new List<string>();
+                            foreach(var att in message.Attachments)
+                                attachmentsUrls.Add(_vkService.UploadFileAsync(account.Id, att).Result);
+
+                            _vkService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
+                        }
                     }
                 }
             }

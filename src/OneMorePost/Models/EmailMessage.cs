@@ -8,6 +8,11 @@ namespace OneMorePost.Models
 {
     public class EmailMessage
     {
+        public EmailMessage()
+        {
+            Attachments = new List<Attachment>();
+        }
+
         public int Id { get; set; }
         public string From { get; set; }
         public string Subject { get; set; }

@@ -96,7 +96,7 @@ namespace OneMorePost.Services
                                     message.Attachments.Add(new Attachment
                                     {
                                         Title = attachment.FileName,
-                                        Contents = ms
+                                        Contents = ms.ToArray()
                                     });
                                 }
                             }
