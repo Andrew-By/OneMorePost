@@ -47,7 +47,7 @@ namespace OneMorePost
             // Здесь добавляем свои сервисы
             services.AddSingleton<IVKService, VKService>();
             services.AddSingleton<ITelegramService, TelegramService>();
-            services.AddSingleton<IMailService, IMailService>();
+            services.AddSingleton<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
