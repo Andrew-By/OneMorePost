@@ -23,7 +23,9 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.1",
     "Microsoft.NETCore.App": "1.1.1",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
-    "Telegram.Bot": "12.0.0-beta-02"
+    "Telegram.Bot": "12.0.0-beta-02",
+    "MailKit": "1.16.0",
+    "MimeKit": "1.16.0"
   },
 
   "tools": {
