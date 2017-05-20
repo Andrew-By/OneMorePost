@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OneMorePost.Services;
+using OneMorePost.Interfaces;
 
 namespace OneMorePost
 {
@@ -27,6 +29,8 @@ namespace OneMorePost
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(typeof(IMailService), typeof(MailService));
+
             // Add framework services.
             services.AddMvc();
         }
