@@ -9,6 +9,6 @@ namespace OneMorePost.Models
     public class Attachment
     {
         public string Title { get; set; }
-        public Stream Contents { get; set; }
+        public byte[] Contents { get; set; }
     }
 }
