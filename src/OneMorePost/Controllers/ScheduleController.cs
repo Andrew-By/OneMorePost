@@ -25,25 +25,22 @@ namespace OneMorePost.Controllers
             _mailService = mailService;
             _vkService = vkService;
         }
-        
+
         [HttpGet]
         public IActionResult Get()
         {
-            foreach(var account in _context.Accounts.Include(a=>a.VKAccount).Include(a=>a.EmailAccount))
+            foreach (var account in _context.Accounts.Include(a => a.VKAccount).Include(a => a.EmailAccount))
             {
-                if(account.VKAccount!=null)
+                if (account.VKAccount != null && account.EmailAccount != null)
                 {
-                    if(account.EmailAccount!=null)
+                    List<EmailMessage> messages = _mailService.GetNewMessages(account.Id).ToList();
+                    foreach (var message in messages)
                     {
-                        List<EmailMessage> messages = _mailService.GetNewMessages(account.Id).ToList();
-                        foreach (var message in messages)
-                        {
-                            var attachmentsUrls = new List<string>();
-                            foreach(var att in message.Attachments)
-                                attachmentsUrls.Add(_vkService.UploadFileAsync(account.Id, att).Result);
+                        var attachmentsUrls = new List<string>();
+                        foreach (var att in message.Attachments)
+                            attachmentsUrls.Add(_vkService.UploadFileAsync(account.Id, att).Result);
 
-                            _vkService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
-                        }
+                        _vkService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
                     }
                 }
             }
