@@ -7,6 +7,8 @@ using OneMorePost.Models;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using OneMorePost.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace OneMorePost.Services
 {
@@ -18,19 +20,28 @@ namespace OneMorePost.Services
             InUnsubscribe
         }
 
+        private readonly OneMoreContext _context;
         private readonly IOptions<TelegramSettings> _settings;
         private readonly TelegramBotClient _botClient;
-        private readonly Dictionary<ChatId, EState> _accountsState = new Dictionary<ChatId, EState>();
+        private readonly Dictionary<long, EState> _accountsState = new Dictionary<long, EState>();
 
-        public TelegramService(IOptions<TelegramSettings> settings)
+        public TelegramService(IOptions<TelegramSettings> settings, OneMoreContext context)
         {
+            _context = context;
             _settings = settings;
             _botClient = new TelegramBotClient(settings.Value.BotId);
         }
 
-        public void MakePost(TelegramAccount toUser, string message)
+        public async Task MakePostAsync(int accountId, string message, IList<string> attachments)
         {
-            _botClient.SendTextMessageAsync(toUser.Id, message);
+            var account = _context.Accounts.Include(a => a.TelegramAccounts).FirstOrDefault(a => a.Id == accountId);
+            if (account != null && account.TelegramAccounts != null)
+            {
+                foreach (var telegram in account.TelegramAccounts)
+                {
+                    await _botClient.SendTextMessageAsync(telegram.Id, message);
+                }
+            }
         }
 
         public void OnMessage(TelegramAccount fromUser, string message)
@@ -47,7 +58,7 @@ namespace OneMorePost.Services
                         else
                         {
                             _botClient.SendTextMessageAsync(fromUser.Id,
-                                "Не удалось подписаться, нет такого идентификатора");
+                                "Не удалось подписаться, нет такого идентификатора или вы уже подписаны на этот аккаунт");
                         }
                         break;
                     case EState.InUnsubscribe:
@@ -105,13 +116,33 @@ namespace OneMorePost.Services
 
         private bool doSubscribe(TelegramAccount follower, string guid)
         {
-            // TODO: Implement
+            int accountId;
+            if (Int32.TryParse(guid, out accountId))
+            {
+                var account = _context.Accounts.Include(a => a.TelegramAccounts).FirstOrDefault(a => a.Id == accountId);
+                if (account != null && !account.TelegramAccounts.Contains(follower))
+                {
+                    account.TelegramAccounts.Add(follower);
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
             return false;
         }
 
         private bool doUnsubscibe(TelegramAccount follower, string guid)
         {
-            // TODO: Implement
+            int accountId;
+            if (Int32.TryParse(guid, out accountId))
+            {
+                var account = _context.Accounts.Include(a => a.TelegramAccounts).FirstOrDefault(a => a.Id == accountId);
+                if (account != null && account.TelegramAccounts.Contains(follower))
+                {
+                    bool result = account.TelegramAccounts.Remove(follower);
+                    _context.SaveChanges();
+                    return result;
+                }
+            }
             return false;
         }
     }

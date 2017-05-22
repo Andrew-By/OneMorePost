@@ -18,18 +18,20 @@ namespace OneMorePost.Controllers
         private readonly OneMoreContext _context;
         private readonly IMailService _mailService;
         private readonly IVKService _vkService;
+        private readonly ITelegramService _telegramService;
 
-        public ScheduleController(OneMoreContext context, IMailService mailService, IVKService vkService)
+        public ScheduleController(OneMoreContext context, IMailService mailService, IVKService vkService, ITelegramService telegramService)
         {
             _context = context;
             _mailService = mailService;
             _vkService = vkService;
+            _telegramService = telegramService;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            foreach (var account in _context.Accounts.Include(a => a.VKAccount).Include(a => a.EmailAccount))
+            foreach (var account in _context.Accounts.Include(a => a.VKAccount).Include(a => a.TelegramAccounts).Include(a => a.EmailAccount))
             {
                 if (account.VKAccount != null && account.EmailAccount != null)
                 {
@@ -40,6 +42,7 @@ namespace OneMorePost.Controllers
                         foreach (var att in message.Attachments)
                             attachmentsUrls.Add(_vkService.UploadFileAsync(account.Id, att).Result);
 
+                        _telegramService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
                         _vkService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
                     }
                 }
