@@ -39,41 +39,41 @@ namespace OneMorePost.Services
             {
                 foreach (var telegram in account.TelegramAccounts)
                 {
-                    await _botClient.SendTextMessageAsync(telegram.Id, message);
+                    await _botClient.SendTextMessageAsync(telegram.ChatId, message);
                 }
             }
         }
 
         public void OnMessage(TelegramAccount fromUser, string message)
         {
-            if (_accountsState.ContainsKey(fromUser.Id))
+            if (_accountsState.ContainsKey(fromUser.ChatId))
             {
-                switch (_accountsState[fromUser.Id])
+                switch (_accountsState[fromUser.ChatId])
                 {
                     case EState.InSubscibe:
                         if (doSubscribe(fromUser, message))
                         {
-                            _botClient.SendTextMessageAsync(fromUser.Id, "Вы подписаны");
+                            _botClient.SendTextMessageAsync(fromUser.ChatId, "Вы подписаны");
                         }
                         else
                         {
-                            _botClient.SendTextMessageAsync(fromUser.Id,
+                            _botClient.SendTextMessageAsync(fromUser.ChatId,
                                 "Не удалось подписаться, нет такого идентификатора или вы уже подписаны на этот аккаунт");
                         }
                         break;
                     case EState.InUnsubscribe:
                         if (doUnsubscibe(fromUser, message))
                         {
-                            _botClient.SendTextMessageAsync(fromUser.Id, "Вы отписаны");
+                            _botClient.SendTextMessageAsync(fromUser.ChatId, "Вы отписаны");
                         }
                         else
                         {
-                            _botClient.SendTextMessageAsync(fromUser.Id,
+                            _botClient.SendTextMessageAsync(fromUser.ChatId,
                                 "Не удалось отписаться, нет такой записи в подписках");
                         }
                         break;
                 }
-                _accountsState.Remove(fromUser.Id);
+                _accountsState.Remove(fromUser.ChatId);
             }
             else
             {
@@ -83,12 +83,12 @@ namespace OneMorePost.Services
 
         public void Start(TelegramAccount user)
         {
-            _botClient.SendTextMessageAsync(user.Id, "Вы можете вызвать /help для получения возможных команд");
+            _botClient.SendTextMessageAsync(user.ChatId, "Вы можете вызвать /help для получения возможных команд");
         }
 
         public void Help(TelegramAccount user)
         {
-            _botClient.SendTextMessageAsync(user.Id, "Команды:\n" +
+            _botClient.SendTextMessageAsync(user.ChatId, "Команды:\n" +
                 "/help - Вывести возможные команды\n" +
                 "/subscribe - Подписаться на новые письма\n" +
                 "/unsubscribe - Отписаться от получения писем\n");
@@ -96,22 +96,22 @@ namespace OneMorePost.Services
 
         public void Subscribe(TelegramAccount follower)
         {
-            if (_accountsState.ContainsKey(follower.Id))
+            if (_accountsState.ContainsKey(follower.ChatId))
             {
-                _accountsState.Remove(follower.Id);
+                _accountsState.Remove(follower.ChatId);
             }
-            _accountsState.Add(follower.Id, EState.InSubscibe);
-            _botClient.SendTextMessageAsync(follower.Id, "Пожалуйста, введите уникальный идентификатор подписки");
+            _accountsState.Add(follower.ChatId, EState.InSubscibe);
+            _botClient.SendTextMessageAsync(follower.ChatId, "Пожалуйста, введите уникальный идентификатор подписки");
         }
 
         public void Unsubscribe(TelegramAccount follower)
         {
-            if (_accountsState.ContainsKey(follower.Id))
+            if (_accountsState.ContainsKey(follower.ChatId))
             {
-                _accountsState.Remove(follower.Id);
+                _accountsState.Remove(follower.ChatId);
             }
-            _accountsState.Add(follower.Id, EState.InUnsubscribe);
-            _botClient.SendTextMessageAsync(follower.Id, "Пожалуйста, введите уникальный идентификатор подписки");
+            _accountsState.Add(follower.ChatId, EState.InUnsubscribe);
+            _botClient.SendTextMessageAsync(follower.ChatId, "Пожалуйста, введите уникальный идентификатор подписки");
         }
 
         private bool doSubscribe(TelegramAccount follower, string guid)

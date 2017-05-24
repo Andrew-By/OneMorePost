@@ -10,12 +10,12 @@ namespace OneMorePost.Models
 {
     public class TelegramAccount : IEquatable<TelegramAccount>
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long Id { get; set; }
+        public int Id { get; set; }
+        public long ChatId { get; set; }
 
         public bool Equals(TelegramAccount other)
         {
-            return Id == other.Id;
+            return ChatId == other.ChatId;
         }
     }
 }
