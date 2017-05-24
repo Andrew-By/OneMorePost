@@ -10,6 +10,6 @@ namespace OneMorePost.Models
         public int Id { get; set; }
         public EmailAccount EmailAccount { get; set; }
         public VKAccount VKAccount { get; set; }
-        //public List<TelegramAccount> TelegramAccounts { get; set; } // Пока не починим ChatId Primary Key
+        public List<TelegramAccount> TelegramAccounts { get; set; }
     }
 }

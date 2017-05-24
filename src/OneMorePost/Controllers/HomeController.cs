@@ -45,7 +45,8 @@ namespace WebApplication1.Controllers
                     UserName = login,
                     Password = password,
                     InternalWhileListFrom = "*"
-                }
+                },
+                TelegramAccounts = new List<TelegramAccount>()
             });
             _context.SaveChanges();
 

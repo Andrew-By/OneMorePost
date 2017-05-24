@@ -8,7 +8,7 @@ namespace OneMorePost.Interfaces
 {
     public interface ITelegramService
     {
-        void MakePost(TelegramAccount toUser, string message);
+        Task MakePostAsync(int accountId, string message, IList<string> attachments);
         void OnMessage(TelegramAccount fromUser, string message);
         void Start(TelegramAccount user);
         void Help(TelegramAccount user);

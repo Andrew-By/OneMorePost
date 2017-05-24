@@ -29,7 +29,7 @@ namespace OneMorePost.Controllers
         {
             if (message.Type == UpdateType.MessageUpdate)
             {
-                var from = new TelegramAccount { Id = message.Message.From.Id };
+                var from = new TelegramAccount { ChatId = message.Message.From.Id };
                 switch (message.Message.Text)
                 {
                     case "/start":
