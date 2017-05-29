@@ -42,8 +42,8 @@ namespace OneMorePost.Controllers
                         foreach (var att in message.Attachments)
                             attachmentsUrls.Add(_vkService.UploadFileAsync(account.Id, att).Result);
 
-                        _telegramService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
-                        _vkService.MakePostAsync(account.Id, message.Body, attachmentsUrls);
+                        _telegramService.MakePostAsync(account.Id, message.ToString(), attachmentsUrls);
+                        _vkService.MakePostAsync(account.Id, message.ToString(), attachmentsUrls);
                     }
                 }
             }

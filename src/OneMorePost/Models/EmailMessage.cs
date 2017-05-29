@@ -19,5 +19,10 @@ namespace OneMorePost.Models
         public string Body { get; set; }
         public DateTime ReceivedDate { get; set; }
         public List<Attachment> Attachments { get; set; }
+
+        public override string ToString()
+        {
+            return $"От: {From}\nТема: {Subject}\n\n{Body}";
+        }
     }
 }
