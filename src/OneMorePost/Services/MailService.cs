@@ -48,63 +48,66 @@ namespace OneMorePost.Services
 
                     foreach (var summary in client.Inbox.Fetch((int)eAcc.LastMessageUid, -1, MessageSummaryItems.UniqueId))
                     {
-                        MimeMessage iMessage = client.Inbox.GetMessage(summary.UniqueId);
-
-                        // Если в белом списке есть запись "*", то принимаем письма от всех отправителей
-                        if (eAcc.WhileListFrom.Contains("*") || eAcc.WhileListFrom.Contains(iMessage.From.Mailboxes.First().Address))
+                        if (summary.UniqueId.Id > (int)eAcc.LastMessageUid)
                         {
+                            MimeMessage iMessage = client.Inbox.GetMessage(summary.UniqueId);
 
-                            // Текстовое содержимое
-
-                            var message = new EmailMessage
+                            // Если в белом списке есть запись "*", то принимаем письма от всех отправителей
+                            if (eAcc.WhileListFrom.Contains("*") || eAcc.WhileListFrom.Contains(iMessage.From.Mailboxes.First().Address))
                             {
-                                Id = (int)summary.UniqueId.Id,
-                                From = iMessage.From.Mailboxes.First().Name,
-                                Subject = iMessage.Subject,
-                                Body = iMessage.TextBody,
-                                ReceivedDate = iMessage.Date.LocalDateTime
-                            };
 
-                            // Вложения
+                                // Текстовое содержимое
 
-                            var multiparts = new List<Multipart>();
-                            var attachments = new List<MimePart>();
-                            using (var iter = new MimeIterator(iMessage))
-                            {
-                                while (iter.MoveNext())
+                                var message = new EmailMessage
                                 {
-                                    var multipart = iter.Parent as Multipart;
-                                    var part = iter.Current as MimePart;
+                                    Id = (int)summary.UniqueId.Id,
+                                    From = iMessage.From.Mailboxes.First().Name,
+                                    Subject = iMessage.Subject,
+                                    Body = iMessage.TextBody,
+                                    ReceivedDate = iMessage.Date.LocalDateTime
+                                };
 
-                                    if (multipart != null && part != null && part.IsAttachment)
+                                // Вложения
+
+                                var multiparts = new List<Multipart>();
+                                var attachments = new List<MimePart>();
+                                using (var iter = new MimeIterator(iMessage))
+                                {
+                                    while (iter.MoveNext())
                                     {
-                                        multiparts.Add(multipart);
-                                        attachments.Add(part);
+                                        var multipart = iter.Parent as Multipart;
+                                        var part = iter.Current as MimePart;
+
+                                        if (multipart != null && part != null && part.IsAttachment)
+                                        {
+                                            multiparts.Add(multipart);
+                                            attachments.Add(part);
+                                        }
                                     }
                                 }
-                            }
 
-                            for (int i = 0; i < attachments.Count; i++)
-                                multiparts[i].Remove(attachments[i]);
+                                for (int i = 0; i < attachments.Count; i++)
+                                    multiparts[i].Remove(attachments[i]);
 
-                            foreach (var attachment in attachments)
-                            {
-                                using (var ms = new MemoryStream())
+                                foreach (var attachment in attachments)
                                 {
-                                    attachment.ContentObject.DecodeTo(ms);
-
-                                    message.Attachments.Add(new Attachment
+                                    using (var ms = new MemoryStream())
                                     {
-                                        Title = attachment.FileName,
-                                        Contents = ms.ToArray()
-                                    });
+                                        attachment.ContentObject.DecodeTo(ms);
+
+                                        message.Attachments.Add(new Attachment
+                                        {
+                                            Title = attachment.FileName,
+                                            Contents = ms.ToArray()
+                                        });
+                                    }
                                 }
+
+                                newMessages.Add(message);
                             }
 
-                            newMessages.Add(message);
+                            eAcc.LastMessageUid = (int)summary.UniqueId.Id; // Учитываем Id сообщения, даже если оно не подошло
                         }
-
-                        eAcc.LastMessageUid = (int)summary.UniqueId.Id; // Учитываем Id сообщения, даже если оно не подошло
                     }
                 }
 
